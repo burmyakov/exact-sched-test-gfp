@@ -29,7 +29,7 @@ bool deadline_miss(const state& s, const bool verbose) {
         if (verbose) {
             cout << "Failure state:" << endl;
             for (int i = 0; i < N; i++) {
-                cout << "c[" << i << "]: " << s.c[i] << " t[" << i << "]: " << s.t[i] << endl;
+                cout << "c[" << i << "]: " << s.c[i] << " d[" << i << "]: " << s.d(i) << " p[" << i << "]" << s.p[i] << endl;
             }
         }
         return true;
@@ -63,18 +63,18 @@ short int algorithm_move(state& s, const unsigned short int N, const unsigned sh
     if (!condition_job_interference(s, m, dt, perm)) {
         // interf. cond. violated
         for (int i = 0; i < m; i++) s.c[perm[i]] = max(s.c[perm[i]] - dt, 0);
-        for (int i = 0; i < N; i++) s.t[i] = max(s.t[i] - dt, 0);
+        for (int i = 0; i < N; i++) s.p[i] = max(s.p[i] - dt, 0); // ????????? to recheck
         if (deadline_miss(s, verbose)) return -1;
         else return 1; // no deadline miss, but interference cond. violated
     } else {
         // interf. cond. holds
         const unsigned short previousCk = s.c[N-1];
-        for (unsigned short i = 0; i < N; i++) s.jobCanBeReleasedBefore[i] = ((s.t[i] == 0)?true:false);
+        for (unsigned short i = 0; i < N; i++) s.jobCanBeReleasedBefore[i] = ((s.p[i] == 0)?true:false);
         
         conditionC_cri_tau_i(s, m, perm); // set .releaseAtEarliest flags
         
         for (int i = 0; i < m; i++) s.c[perm[i]] = max(s.c[perm[i]] - dt, 0);
-        for (int i = 0; i < N; i++) s.t[i] = max(s.t[i] - dt, 0);
+        for (int i = 0; i < N; i++) s.p[i] = max(s.p[i] - dt, 0);
         if (deadline_miss(s, verbose)) return -1;
         
         for (unsigned short i = 0; i < N; i++) s.prevState_processorAvailableForTau_i[i] = s.processorAvailableForTau_i[i];

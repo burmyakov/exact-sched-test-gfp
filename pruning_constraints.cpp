@@ -62,7 +62,7 @@ unsigned short get_dt_preempt(const state& s, const unsigned short i, const unsi
     
     if (n_hp_i >= m) return 0;
     else { // i > m && n_hp[i] < m   -> tau_i gets a processor at state s
-        for (unsigned short l = 0; l < i; l++) { if (s.t[l] > 0) ps[l] = s.t[l]; else ps[l] = 1; }
+        for (unsigned short l = 0; l < i; l++) { if (s.p[l] > 0) ps[l] = s.p[l]; else ps[l] = 1; }
         sort(ps, ps + (i-1));
 
         return ps[m - n_hp_i - 1];
@@ -88,7 +88,7 @@ bool conditionA_cri_tau_i(const state& s, const unsigned short m) {
             for (unsigned short i = 0; i < N-1; i++) {
                 if (s.c[i] == s.tsLocal.C[i]) { // tau_i job starts execution
                     if (s.processorAvailableForTau_i[i]) {
-                        if (s.t[i] >= s.t[N-1]) {
+                        if (s.p[i] >= s.p[N-1]) {
                             return false;
                         }
                     }
@@ -126,12 +126,12 @@ bool conditionB_cri_tau_i(const state& s, const unsigned short m) {
                 //if (i == 0) n_hp[i] = 0;
                 //else {n_hp[i] = n_hp[i-1]; if (s.c[i-1] > 0) n_hp[i]++;}
                 
-                if (s.t[i] == 0) {
+                if (s.p[i] == 0) {
                     if (s.processorAvailableForTau_i[i]) {
                         
                         // assume that tau_i releases a job
                         s.c[i] = s.tsLocal.C[i];
-                        s.t[i] = s.tsLocal.T[i];
+                        s.p[i] = s.tsLocal.P[i];
                         
                         // compute dt for the next scheduling interval
                         //sortTasksByPriorities(s, N, perm2);
@@ -157,7 +157,7 @@ bool conditionB_cri_tau_i(const state& s, const unsigned short m) {
                         
                         // remove the assumption that tau_i releases a job
                         s.c[i] = 0;
-                        s.t[i] = 0;
+                        s.p[i] = 0;
                     } else {
                         // As s.processorAvailableForTau_i[i] == false, thus terminating iterations
                         return true;
@@ -237,7 +237,7 @@ bool condition_for_releases_of_hp_jobs(const state& s){
     
     if (s.c[s.tsLocal.n-1] > 0) {
         for (int i = 0; i < s.tsLocal.n-1; i++)
-            if (s.t[i] > 0) return true;
+            if (s.p[i] > 0) return true;
         
         return false;
     } else return true;
@@ -262,7 +262,7 @@ float get_Iub(const state& s, const unsigned short m) {
     const int t = s.d(N-1);
     
     for (int i = 0; i < N-1; i++) {
-        W += s.c[i] + (max(0, t - max(0, (int)(s.t[i])))/s.tsLocal.T[i])*s.tsLocal.C[i] + min((int)(s.tsLocal.C[i]), (max(0, t - max(0, (int)(s.t[i]))) % s.tsLocal.T[i]));
+        W += s.c[i] + (max(0, t - max(0, (int)(s.p[i])))/s.tsLocal.P[i])*s.tsLocal.C[i] + min((int)(s.tsLocal.C[i]), (max(0, t - max(0, (int)(s.p[i]))) % s.tsLocal.P[i]));
     }
     
     return W/m;

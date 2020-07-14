@@ -7,24 +7,25 @@ struct TS {
 	static const int MAXN = 16; 
 	int C[MAXN]; // WCETs
 	int D[MAXN]; // deadlines
-	int T[MAXN]; // minimum interarrival times
+	int P[MAXN]; // minimum interarrival times
 	
-	int tmax; // max(T_i) (buffered value)
+	int pmax; // max(P_i) (buffered value)
 	TS() { }
     
-	TS(int n_) : n(n_), tmax(0) { assert(n <= MAXN); }
+	TS(int n_) : n(n_), pmax(0) { assert(n <= MAXN); }
     
-	void setTask(int i, int Ci, int Di, int Ti) {
+	void setTask(int i, int Ci, int Di, int Pi) {
 		C[i] = Ci;
 		D[i] = Di;
-		T[i] = Ti;
+		P[i] = Pi;
         
-		tmax = std::max(tmax, Ti);
+		pmax = std::max(pmax, Pi);
         
 		assert(C[i] <= D[i]); 
-		assert(D[i] <= T[i]); // * constrained deadlines *
+		assert(D[i] <= P[i]); // * constrained deadlines *
 	}
     
-	int Tmax() const { return tmax; }
+	int Pmax() const { return pmax; }
 	void read();
 };
+

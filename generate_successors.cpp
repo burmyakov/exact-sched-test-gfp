@@ -48,7 +48,7 @@ void generate_successors(const TS& ts, state& s, const unsigned short m, vector<
         for (unsigned short successorItr = 0; successorItr < successorsNum; successorItr++)
             (*successors)[successorItr].processorAvailableForTau_i[i] = is_processor_available_to_tau_i((*successors)[successorItr], i, m);
         
-        if (s.t[i] == 0) {
+        if (s.p[i] == 0) {
             
             // Davis and Burns 2011 condition A for release of tau_k
             if ((i == (ts.n-1)) && (!s.prevState_processorAvailableForTau_i[i])) continue;
@@ -62,7 +62,7 @@ void generate_successors(const TS& ts, state& s, const unsigned short m, vector<
                 
                 (*successors)[successorsNum] = (*successors)[successorItr];
                 (*successors)[successorsNum].c[i] = ts.C[i];
-                (*successors)[successorsNum].t[i] = ts.T[i];
+                (*successors)[successorsNum].p[i] = ts.P[i];
                 (*successors)[successorsNum].interferred[i] = false;
                 successorsNum++;
             }

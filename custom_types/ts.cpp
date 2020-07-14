@@ -9,14 +9,14 @@ void TS::read() {
 	cin >> n;
     
 	for(int i = 0; i < n; i++) {
-		int C, T; 
+		int C, D, P;
 		cerr << "C[" << i << "] ?" << endl;
 		cin >> C; 
-		//cerr << "D[" << i << "] ?" << endl;
-		//cin >> D;
-		cerr << "T[" << i << "] ?" << endl;
-		cin >> T; 
-		setTask(i, C, T, T);
+		cerr << "D[" << i << "] ?" << endl;
+		cin >> D;
+		cerr << "P[" << i << "] ?" << endl;
+		cin >> P;
+		setTask(i, C, D, P);
 	}
 }
 

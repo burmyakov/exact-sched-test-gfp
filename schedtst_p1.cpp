@@ -9,12 +9,12 @@
 #include "p1_key/test_6th_task.h"
 #include "p1_key/test_7th_task.h"
 #include "p1_key/test_8th_task.h"
-#include "p1_key/test_9th_task.h"
+/*#include "p1_key/test_9th_task.h"
 #include "p1_key/test_10th_task.h"
 #include "p1_key/test_11th_task.h"
 #include "p1_key/test_12th_task.h"
 #include "p1_key/test_13th_task.h"
-#include "p1_key/test_14th_task.h"
+#include "p1_key/test_14th_task.h"*/
 
 
 using namespace std;
@@ -35,24 +35,39 @@ int main(int argc, char* argv[]) {
     cerr << "Number of tasks?" << endl;
     cin >> n;
     
+    bool implicitDeadlines = false;
+    cerr << "Tasks have implicit deadlines? (1 - yes, 0 - no)" << endl;
+    cin >> implicitDeadlines;
+    
     tsOriginal.n = n;
-    int C, P;
+    int C, D, P;
     for (int i = 0; i < n; i++) {
         cerr << "C[" << i << "]?" << endl;
         cin >> C;
+        
+        if (!implicitDeadlines) {
+            cerr << "D[" << i << "]?" << endl;
+            cin >> D;
+        }
+        
         cerr << "P[" << i << "]?" << endl;
         cin >> P;
-        tsOriginal.setTask(i, C, P, P);
+        if (!implicitDeadlines) tsOriginal.setTask(i, C, D, P);
+        else tsOriginal.setTask(i, C, P, P);
     }
     
     bool removeDominatedStatesFromMap = 0; // default setting
+    cerr << "Dynamically optimize memory usage? (to remove states from memory at runtime):" << endl;
+    cerr << "0 - no (recommended)" << endl;
+    cerr << "1 - yes (might increase execution time)" << endl;
+    cin >> removeDominatedStatesFromMap;
     
     bool verbose = 0;
     cerr << "Verbose? (0 - no, 1 -yes)" << endl;
     cin >> verbose;
 
     
-    for (int i = 0; i < m; i++) ts.setTask(i, tsOriginal.C[i], tsOriginal.D[i], tsOriginal.T[i]);
+    for (int i = 0; i < m; i++) ts.setTask(i, tsOriginal.C[i], tsOriginal.D[i], tsOriginal.P[i]);
     
     unsigned long int savedStatesNum = 0;
     unsigned long int visitedStatesNum = 0;
@@ -68,7 +83,7 @@ int main(int argc, char* argv[]) {
     
     for (int N = m + 1; N <= tsOriginal.n; N++) {
         ts.n = N;
-        ts.setTask(N-1, tsOriginal.C[N-1], tsOriginal.D[N-1], tsOriginal.T[N-1]);
+        ts.setTask(N-1, tsOriginal.C[N-1], tsOriginal.D[N-1], tsOriginal.P[N-1]);
 
         if (verbose) {
             cout << endl << "===================" << endl;
@@ -132,7 +147,7 @@ int main(int argc, char* argv[]) {
                 savedStatesNum += savedStatesNumIncr; visitedStatesNum += visitedStatesNumIncr;
                 break;
 
-            case 9:
+            /*case 9:
                 t0 = clock();
                 sched = test_9th_task(verbose, m, ts, removeDominatedStatesFromMap, savedStatesNumIncr, visitedStatesNumIncr);
                 tExecution_p1 = clock() - t0; tExecutionTotal_p1 += tExecution_p1;
@@ -178,7 +193,7 @@ int main(int argc, char* argv[]) {
                 tExecution_p1 = clock() - t0; tExecutionTotal_p1 += tExecution_p1;
 
                 savedStatesNum += savedStatesNumIncr; visitedStatesNum += visitedStatesNumIncr;
-                break;
+                break;*/
 
                 
             default: cout << "No function defined to test " << N << " tasks!" << endl;
@@ -188,11 +203,11 @@ int main(int argc, char* argv[]) {
     }
 
 
-    const char* fileName = (argv[2*(tsOriginal.n)+5]);
+    /*const char* fileName = (argv[6+3*(tsOriginal.n)]);
 
     fileResults.open(fileName, ios::app);
     fileResults << "\t" << sched << "\t" << tExecutionTotal_p1 << "\t" << savedStatesNum;
-    fileResults.close();
+    fileResults.close();*/
     
     if (!removeDominatedStatesFromMap) cout << "Sporadic burm2018 p1 (no r.):\t" << (float)(tExecutionTotal_p1*100/CLOCKS_PER_SEC)/100 << " sec,  \t / " << savedStatesNum << " saved states" << "  \t / " << visitedStatesNum << " visited states";
     else cout << "Sporadic burm2018 p1:\t\t" << (float)(tExecutionTotal_p1*100/CLOCKS_PER_SEC)/100 << " sec,  \t / " << savedStatesNum << " saved states" << "  \t / " << visitedStatesNum << " visited states";

@@ -9,7 +9,8 @@ using namespace std;
 struct state {
     TS& tsLocal;
     unsigned short int* c; // remaining execution time
-    unsigned short int* t; // time to next period
+    //unsigned short int* d; // remaining time until deadline
+    unsigned short int* p; // time to next period
     bool* interferred; // interference flags
     bool* jobCanBeReleasedBefore;
     bool* processorAvailableForTau_i;
@@ -22,8 +23,9 @@ struct state {
     // constructor 1
     state(TS& _ts): tsLocal(_ts) {
         c = new unsigned short int[tsLocal.n];
-        t = new unsigned short int[tsLocal.n];
-        for (int i = 0; i < tsLocal.n; i++) c[i] = t[i] = 0;
+        //d = new unsigned short int[tsLocal.n];
+        p = new unsigned short int[tsLocal.n];
+        for (int i = 0; i < tsLocal.n; i++) c[i] = p[i] = 0;
 
         jobCanBeReleasedBefore = new bool[tsLocal.n];
         processorAvailableForTau_i = new bool[tsLocal.n];
@@ -46,11 +48,13 @@ struct state {
     // copy constructor
     state(const state& s) : tsLocal(s.tsLocal) {
         c = new unsigned short int[tsLocal.n];
-        t = new unsigned short int[tsLocal.n];
+        //d = new unsigned short int[tsLocal.n];
+        p = new unsigned short int[tsLocal.n];
         
         for (int i = 0; i < tsLocal.n; i++) {
             c[i] = s.c[i];
-            t[i] = s.t[i];
+            //d[i] = s.d[i];
+            p[i] = s.p[i];
         }
 
         jobCanBeReleasedBefore = new bool[tsLocal.n];
@@ -76,7 +80,8 @@ struct state {
         if(this != &s) {
             for(unsigned short i=0; i<tsLocal.n; i++) {
                 c[i] = s.c[i];
-                t[i] = s.t[i];
+                //d[i] = s.d[i];
+                p[i] = s.p[i];
                 jobCanBeReleasedBefore[i] = s.jobCanBeReleasedBefore[i];
             }
             
@@ -102,7 +107,7 @@ struct state {
     
     void updateLockedJobsNum() {
         lockedJobsNum = 0;
-        for (int i=0; i<tsLocal.n; i++) if (t[i] > 0) lockedJobsNum++;
+        for (int i=0; i<tsLocal.n; i++) if (p[i] > 0) lockedJobsNum++;
         return;
     }
     
@@ -114,7 +119,7 @@ struct state {
     
     void updateSumSlacks() {
         sumSlacks = 0;
-        for (int i = 0; i < tsLocal.n; i++) sumSlacks += t[i];
+        for (int i = 0; i < tsLocal.n; i++) sumSlacks += p[i];
         return;
     }
     
@@ -135,13 +140,13 @@ struct state {
         
         for (int i = tsLocal.n-1; i >= 0; i--) {
             if ((c[i] > 0) && (s.c[i] > 0)) {
-                if (t[i] - c[i] < s.t[i] - s.c[i]) return false;
-                if (t[i] - c[i] > s.t[i] - s.c[i]) return true;
+                if (p[i] - c[i] < s.p[i] - s.c[i]) return false;
+                if (p[i] - c[i] > s.p[i] - s.c[i]) return true;
             }
             if(c[i] > s.c[i]) return true;
             if(s.c[i] > c[i]) return false;
-            if(t[i] > s.t[i]) return false; // true
-            if(s.t[i] > t[i]) return true; // false
+            if(p[i] > s.p[i]) return false; // true
+            if(s.p[i] > p[i]) return true; // false
         }
         
         return false;
@@ -152,13 +157,13 @@ struct state {
     
     
     // Time to next deadline of a task
-    inline int d(int i) const { return max(t[i] - (tsLocal.T[i] - tsLocal.D[i]), 0); }
+    inline int d(int i) const { return max(p[i] - (tsLocal.P[i] - tsLocal.D[i]), 0); }
     
     // Printing functions
     void printCmpct() const {
         cout << "{";
         for(int i=0; i<tsLocal.n; i++) {
-            cout << "(" << c[i] << ", " << t[i] << ") ";
+            cout << "(" << c[i] << ", " << d(i) << ", " << p[i] << ") ";
         }
         cout << "}";
         cout << endl;
@@ -168,7 +173,7 @@ struct state {
         cout << "==============" << endl;
         cout << "{";
         for(int i=0; i<tsLocal.n; i++) {
-            cout << "(" << c[i] << ", " << t[i] << ") ";
+            cout << "(" << c[i] << ", " << d(i) << ", " << p[i] << ") ";
         }
         cout << "}" << endl;
         cout << "pendJobsNum:\t" << pendJobsNum << endl;
@@ -188,7 +193,7 @@ struct state {
         cout << "==============" << endl;
         cout << "{";
         for(int i=0; i<=indx; i++) {
-            cout << "(" << c[i] << ", " << t[i] << ") ";
+            cout << "(" << c[i] << ", " << d(i) << ", " << p[i] << ") ";
         }
         cout << "}" << endl;
         cout << "pendJobsNum:\t" << pendJobsNum << endl;
@@ -207,7 +212,7 @@ struct state {
     // destructor
     ~state() {
         delete [] c;
-        delete [] t;
+        delete [] p;
         delete [] interferred;
         delete [] jobCanBeReleasedBefore;
         delete [] processorAvailableForTau_i;

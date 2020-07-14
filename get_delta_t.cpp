@@ -8,10 +8,10 @@
 
 unsigned short get_dt_to_next_release(const state& s, const unsigned short int N, const unsigned short m){
     
-    int dtToNextRelease = max(1, (int)(s.t[0]));
+    int dtToNextRelease = max(1, (int)(s.p[0]));
     
     for (unsigned short i = 1; i < m; i++) {
-        dtToNextRelease = min(max(1, (int)(s.t[i])), dtToNextRelease);
+        dtToNextRelease = min(max(1, (int)(s.p[i])), dtToNextRelease);
         if (dtToNextRelease == 1) return dtToNextRelease;
     }
     
@@ -20,10 +20,9 @@ unsigned short get_dt_to_next_release(const state& s, const unsigned short int N
     // If tau_i, with i > m, releases a job at time $t$, then
     // a processor is available for tau_i at time $t-1$
     for (unsigned short i = m; i < N-1; i++) {
-        //if ((s.processorAvailableForTau_i[i]) || (s.releaseAtEarliest[i])) {
-        if ((!s.processorAvailableForTau_i[i]) && (s.t[i] == 0)) continue;
+        if ((!s.processorAvailableForTau_i[i]) && (s.p[i] == 0)) continue;
         else {
-            dtToNextRelease = min(max(1, (int)(s.t[i])), dtToNextRelease);
+            dtToNextRelease = min(max(1, (int)(s.p[i])), dtToNextRelease);
             if (dtToNextRelease == 1) return dtToNextRelease;
         }
     }
@@ -33,7 +32,7 @@ unsigned short get_dt_to_next_release(const state& s, const unsigned short int N
     // if tau_k releases its job at time $t$,
     // then at time $t-1$ there should be less than $m$ pending jobs
     if (s.pendJobsNum < m)
-        dtToNextRelease = min(max(1, (int)(s.t[N-1])), dtToNextRelease);
+        dtToNextRelease = min(max(1, (int)(s.p[N-1])), dtToNextRelease);
     
     return dtToNextRelease;
 }

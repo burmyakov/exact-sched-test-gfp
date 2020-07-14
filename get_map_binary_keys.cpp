@@ -103,7 +103,7 @@ void get_keys_lj(const state& s, const unsigned short N, const my_bitset bKey_pj
     if (bKey_pj[0] == 1) {
         (*bKeys_lj)[0].reset(); (*bKeys_lj)[0].set(0, 1);
         keysNum = 1;
-    } else if (s.t[0] == 0) {
+    } else if (s.p[0] == 0) {
         (*bKeys_lj)[0].reset(); //(*bKeys_lj)[0].set(0, 0);
         keysNum = 1;
     } else {
@@ -120,7 +120,7 @@ void get_keys_lj(const state& s, const unsigned short N, const my_bitset bKey_pj
         if (bKey_pj[i] == 1)
             for (int j = 0; j < curKeysNum; j++)
                 (*bKeys_lj)[j].set(i, 1);
-        else if (s.t[i] == 0) {
+        else if (s.p[i] == 0) {
             /*for (int j = 0; j < curKeysNum; j++)
                 (*bKeys_lj)[j].set(i, 0);*/
         } else
@@ -148,7 +148,7 @@ void get_keys_lj2(const state& s, const unsigned short N, const my_bitset bKey_p
     if (bKey_pj2[0] == 1) {
         (*bKeys_lj2)[0].reset(); (*bKeys_lj2)[0].set(0, 1);
         keysNum = 1;
-    } else if (s.t[0] > 0) {
+    } else if (s.p[0] > 0) {
         (*bKeys_lj2)[0].reset(); (*bKeys_lj2)[0].set(0, 1);
         keysNum = 1;
     } else {
@@ -164,7 +164,7 @@ void get_keys_lj2(const state& s, const unsigned short N, const my_bitset bKey_p
         if (bKey_pj2[i] == 1)
             for (int j = 0; j < curKeysNum; j++)
                 (*bKeys_lj2)[j].set(i, 1);
-        else if (s.t[i] > 0)
+        else if (s.p[i] > 0)
             for (int j = 0; j < curKeysNum; j++)
                 (*bKeys_lj2)[j].set(i, 1);
         else
@@ -194,7 +194,7 @@ void get_keys_p1(const state& s, const TS& ts, const my_bitset bKey_lj, unsigned
     if (bKey_lj[0] == 0) {
         (*bKeys_p1)[0].reset(); //(*bKeys_p1)[0].set(0, 0);
         keysNum = 1;
-    } else if (s.t[0] <= ((float)(ts.T[0]))/2) {
+    } else if (s.p[0] <= ((float)(ts.P[0]))/2) {
         (*bKeys_p1)[0].reset(); //(*bKeys_p1)[0].set(0, 0);
         keysNum = 1;
     } else {
@@ -211,7 +211,7 @@ void get_keys_p1(const state& s, const TS& ts, const my_bitset bKey_lj, unsigned
             /*for (unsigned short int j = 0; j < curKeysNum; j++) {
                 (*bKeys_p1)[j].set(i, 0);
             }*/
-        } else if (s.t[i] <= ((float)(ts.T[i]))/2) {
+        } else if (s.p[i] <= ((float)(ts.P[i]))/2) {
             /*for (unsigned short int j = 0; j < curKeysNum; j++) {
                 (*bKeys_p1)[j].set(i, 0);
             }*/
@@ -246,7 +246,7 @@ void get_keys_p2(const state& s, const TS& ts, const my_bitset bKey_lj, const my
         //(*bKeys_p2)[0].set(0, 0);
         keysNum = 1;
     } else if (bKey_p1[0] == 0) {
-        if (s.t[0] <= ((float)(ts.T[0]))/4) {
+        if (s.p[0] <= ((float)(ts.P[0]))/4) {
             //(*bKeys_p2)[0].set(0, 0);
             keysNum = 1;
         } else {
@@ -255,7 +255,7 @@ void get_keys_p2(const state& s, const TS& ts, const my_bitset bKey_lj, const my
             keysNum = 2;
         }
     } else { // case of (bKey_lj[0] == 1)
-        if (s.t[0] <= ((float)(3*ts.T[0]))/4) {
+        if (s.p[0] <= ((float)(3*ts.P[0]))/4) {
             //(*bKeys_p2)[0].set(0, 0);
             keysNum = 1;
         } else {
@@ -274,7 +274,7 @@ void get_keys_p2(const state& s, const TS& ts, const my_bitset bKey_lj, const my
                 (*bKeys_p2)[j].set(i, 0);
             }*/
         } else if (bKey_p1[i] == 0) {
-            if (s.t[i] <= ((float)(ts.T[i]))/4) {
+            if (s.p[i] <= ((float)(ts.P[i]))/4) {
                 /*for (unsigned short j = 0; j < curKeysNum; j++) {
                     (*bKeys_p2)[j].set(i, 0);
                 }*/
@@ -287,7 +287,7 @@ void get_keys_p2(const state& s, const TS& ts, const my_bitset bKey_lj, const my
                 }
             }
         } else { // bKey_p1[i] == 1
-            if (s.t[i] <= ((float)(3*ts.T[i]))/4) {
+            if (s.p[i] <= ((float)(3*ts.P[i]))/4) {
                 /*for (unsigned short j = 0; j < curKeysNum; j++) {
                     (*bKeys_p2)[j].set(i, 0);
                  }*/
@@ -327,7 +327,7 @@ void get_keys_p3(const state& s, const TS& ts, const my_bitset bKey_lj, const my
     } else if (bKey_p1[0] == 0) {
         
         if (bKey_p2[0] == 0) {
-            if (s.t[0] <= ((float)(ts.T[0]))/8) {
+            if (s.p[0] <= ((float)(ts.P[0]))/8) {
                 //(*bKeys_p3)[0].set(0, 0);
                 keysNum = 1;
             } else {
@@ -336,7 +336,7 @@ void get_keys_p3(const state& s, const TS& ts, const my_bitset bKey_lj, const my
                 keysNum = 2;
             }
         } else {
-            if (s.t[0] <= ((float)(3*ts.T[0]))/8) {
+            if (s.p[0] <= ((float)(3*ts.P[0]))/8) {
                 //(*bKeys_p3)[0].set(0, 0);
                 keysNum = 1;
             } else {
@@ -349,7 +349,7 @@ void get_keys_p3(const state& s, const TS& ts, const my_bitset bKey_lj, const my
     } else { // bKey_p1[0] == 1
         
         if (bKey_p2[0] == 0) {
-            if (s.t[0] <= ((float)(5*ts.T[0]))/8) {
+            if (s.p[0] <= ((float)(5*ts.P[0]))/8) {
                 //(*bKeys_p3)[0].set(0, 0);
                 keysNum = 1;
             } else {
@@ -358,7 +358,7 @@ void get_keys_p3(const state& s, const TS& ts, const my_bitset bKey_lj, const my
                 keysNum = 2;
             }
         } else {
-            if (s.t[0] <= ((float)(7*ts.T[0]))/8) {
+            if (s.p[0] <= ((float)(7*ts.P[0]))/8) {
                 //(*bKeys_p3)[0].set(0, 0);
                 keysNum = 1;
             } else {
@@ -381,7 +381,7 @@ void get_keys_p3(const state& s, const TS& ts, const my_bitset bKey_lj, const my
             
             if (bKey_p2[i] == 0) {
                 
-                if (s.t[i] <= ((float)(1*ts.T[i]))/8) {
+                if (s.p[i] <= ((float)(1*ts.P[i]))/8) {
                     //for (unsigned short j = 0; j < curKeysNum; j++) (*bKeys_p3)[i].set(i, 0);
                 } else {
                     for (unsigned short j = 0; j < curKeysNum; j++) {
@@ -393,7 +393,7 @@ void get_keys_p3(const state& s, const TS& ts, const my_bitset bKey_lj, const my
                 }
             } else {
                 
-                if (s.t[i] <= ((float)(3*ts.T[i]))/8) {
+                if (s.p[i] <= ((float)(3*ts.P[i]))/8) {
                     //for (unsigned short j = 0; j < curKeysNum; j++) (*bKeys_p3)[i].set(i, 0);
                 } else {
                     for (unsigned short j = 0; j < curKeysNum; j++) {
@@ -408,7 +408,7 @@ void get_keys_p3(const state& s, const TS& ts, const my_bitset bKey_lj, const my
         } else { // bKey_p1[i] == 1
             
             if (bKey_p2[i] == 0) {
-                if (s.t[i] <= ((float)(5*ts.T[i]))/8) {
+                if (s.p[i] <= ((float)(5*ts.P[i]))/8) {
                     //(*bKeys_p3)[i].set(i, 0);
                 } else {
                     for (unsigned short j = 0; j < curKeysNum; j++) {
@@ -419,7 +419,7 @@ void get_keys_p3(const state& s, const TS& ts, const my_bitset bKey_lj, const my
                     }
                 }
             } else {
-                if (s.t[i] <= ((float)(7*ts.T[i]))/8) {
+                if (s.p[i] <= ((float)(7*ts.P[i]))/8) {
                     //for (unsigned short j = 0; j < curKeysNum; j++) (*bKeys_p3)[i].set(i, 0);
                 } else {
                     for (unsigned short j = 0; j < curKeysNum; j++) {
@@ -925,7 +925,7 @@ void get_keys_p3_2(const state& s, const TS& ts, const my_bitset bKey_lj2, const
     } else if (bKey_p1_2[0] == 0) {
         
         if (bKey_p2_2[0] == 0) {
-            if (s.t[0] > ((float)(ts.T[0]))/8) {
+            if (s.p[0] > ((float)(ts.P[0]))/8) {
                 (*bKeys_p3_2)[0].set(0, 1);
                 keysNum = 1;
             } else {
@@ -934,7 +934,7 @@ void get_keys_p3_2(const state& s, const TS& ts, const my_bitset bKey_lj2, const
                 keysNum = 2;
             }
         } else {
-            if (s.t[0] > ((float)(3*ts.T[0]))/8) {
+            if (s.p[0] > ((float)(3*ts.P[0]))/8) {
                 (*bKeys_p3_2)[0].set(0, 1);
                 keysNum = 1;
             } else {
@@ -947,7 +947,7 @@ void get_keys_p3_2(const state& s, const TS& ts, const my_bitset bKey_lj2, const
     } else { // bKey_p1[0] == 1
         
         if (bKey_p2_2[0] == 0) {
-            if (s.t[0] > ((float)(5*ts.T[0]))/8) {
+            if (s.p[0] > ((float)(5*ts.P[0]))/8) {
                 (*bKeys_p3_2)[0].set(0, 1);
                 keysNum = 1;
             } else {
@@ -956,7 +956,7 @@ void get_keys_p3_2(const state& s, const TS& ts, const my_bitset bKey_lj2, const
                 keysNum = 2;
             }
         } else {
-            if (s.t[0] > ((float)(7*ts.T[0]))/8) {
+            if (s.p[0] > ((float)(7*ts.P[0]))/8) {
                 (*bKeys_p3_2)[0].set(0, 1);
                 keysNum = 1;
             } else {
@@ -979,7 +979,7 @@ void get_keys_p3_2(const state& s, const TS& ts, const my_bitset bKey_lj2, const
             
             if (bKey_p2_2[i] == 0) {
                 
-                if (s.t[i] > ((float)(1*ts.T[i]))/8) {
+                if (s.p[i] > ((float)(1*ts.P[i]))/8) {
                     for (unsigned short j = 0; j < curKeysNum; j++) (*bKeys_p3_2)[j].set(i, 1);
                 } else {
                     for (unsigned short j = 0; j < curKeysNum; j++) {
@@ -991,7 +991,7 @@ void get_keys_p3_2(const state& s, const TS& ts, const my_bitset bKey_lj2, const
                 }
             } else {
                 
-                if (s.t[i] > ((float)(3*ts.T[i]))/8) {
+                if (s.p[i] > ((float)(3*ts.P[i]))/8) {
                     for (unsigned short j = 0; j < curKeysNum; j++) (*bKeys_p3_2)[j].set(i, 1);
                 } else {
                     for (unsigned short j = 0; j < curKeysNum; j++) {
@@ -1006,7 +1006,7 @@ void get_keys_p3_2(const state& s, const TS& ts, const my_bitset bKey_lj2, const
         } else { // bKey_p1[i] == 1
             
             if (bKey_p2_2[i] == 0) {
-                if (s.t[i] > ((float)(5*ts.T[i]))/8) {
+                if (s.p[i] > ((float)(5*ts.P[i]))/8) {
                     for (unsigned short j = 0; j < curKeysNum; j++) (*bKeys_p3_2)[j].set(i, 1);
                 } else {
                     for (unsigned short j = 0; j < curKeysNum; j++) {
@@ -1017,7 +1017,7 @@ void get_keys_p3_2(const state& s, const TS& ts, const my_bitset bKey_lj2, const
                     }
                 }
             } else {
-                if (s.t[i] > ((float)(7*ts.T[i]))/8) {
+                if (s.p[i] > ((float)(7*ts.P[i]))/8) {
                     for (unsigned short j = 0; j < curKeysNum; j++) (*bKeys_p3_2)[j].set(i, 1);
                 } else {
                     for (unsigned short j = 0; j < curKeysNum; j++) {
@@ -1058,7 +1058,7 @@ void get_keys_p2_2(const state& s, const TS& ts, const my_bitset bKey_lj2, const
         //(*bKeys_p2_2)[0].set(0, 0);
         keysNum = 1;
     } else if (bKey_p1_2[0] == 0) {
-        if (s.t[0] > ((float)(ts.T[0]))/4) {
+        if (s.p[0] > ((float)(ts.P[0]))/4) {
             (*bKeys_p2_2)[0].set(0, 1);
             keysNum = 1;
         } else {
@@ -1067,7 +1067,7 @@ void get_keys_p2_2(const state& s, const TS& ts, const my_bitset bKey_lj2, const
             keysNum = 2;
         }
     } else { // case of (bKey_lj2[0] == 1)
-        if (s.t[0] > ((float)(3*ts.T[0]))/4) {
+        if (s.p[0] > ((float)(3*ts.P[0]))/4) {
             (*bKeys_p2_2)[0].set(0, 1);
             keysNum = 1;
         } else {
@@ -1086,7 +1086,7 @@ void get_keys_p2_2(const state& s, const TS& ts, const my_bitset bKey_lj2, const
              (*bKeys_p2_2)[j].set(i, 0);
              }*/
         } else if (bKey_p1_2[i] == 0) {
-            if (s.t[i] > ((float)(ts.T[i]))/4) {
+            if (s.p[i] > ((float)(ts.P[i]))/4) {
                 for (unsigned short j = 0; j < curKeysNum; j++) {
                     (*bKeys_p2_2)[j].set(i, 1);
                 }
@@ -1099,7 +1099,7 @@ void get_keys_p2_2(const state& s, const TS& ts, const my_bitset bKey_lj2, const
                 }
             }
         } else { // bKey_p1_2[i] == 1
-            if (s.t[i] > ((float)(3*ts.T[i]))/4) {
+            if (s.p[i] > ((float)(3*ts.P[i]))/4) {
                 for (unsigned short j = 0; j < curKeysNum; j++) {
                     (*bKeys_p2_2)[j].set(i, 1);
                 }
@@ -1133,7 +1133,7 @@ void get_keys_p1_2(const state& s, const TS& ts, const my_bitset bKey_lj2, unsig
     if (bKey_lj2[0] == 0) {
         (*bKeys_p1_2)[0].reset(); //(*bKeys_p1_2)[0].set(0, 0);
         keysNum = 1;
-    } else if (s.t[0] > ((float)(ts.T[0]))/2) {
+    } else if (s.p[0] > ((float)(ts.P[0]))/2) {
         (*bKeys_p1_2)[0].reset(); (*bKeys_p1_2)[0].set(0, 1);
         keysNum = 1;
     } else {
@@ -1151,7 +1151,7 @@ void get_keys_p1_2(const state& s, const TS& ts, const my_bitset bKey_lj2, unsig
             /*for (unsigned short int j = 0; j < curKeysNum; j++) {
                 (*bKeys_p1_2)[j].set(i, 0);
             }*/
-        } else if (s.t[i] > ((float)(ts.T[i]))/2) {
+        } else if (s.p[i] > ((float)(ts.P[i]))/2) {
             for (unsigned short int j = 0; j < curKeysNum; j++) {
                 (*bKeys_p1_2)[j].set(i, 1);
             }
