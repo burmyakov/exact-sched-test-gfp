@@ -116,16 +116,16 @@ namespace NS_4tasks {
     bool find_dominating_state_p_iterations(const state& s, mt8& visitedStates8) {
         
         for (mt8::iterator itr8 = visitedStates8.begin(); itr8 != visitedStates8.end(); itr8++) {
-            if (itr8->first > s.t[0]) break;
+            if (itr8->first > s.p[0]) break;
             else {
                 for (mt7::iterator itr7 = (itr8->second).begin(); itr7 != (itr8->second).end(); itr7++) {
-                    if (itr7->first > s.t[1]) break;
+                    if (itr7->first > s.p[1]) break;
                     else {
                         for (mt6::iterator itr6 = (itr7->second).begin(); itr6 != (itr7->second).end(); itr6++) {
-                            if (itr6->first > s.t[2]) break;
+                            if (itr6->first > s.p[2]) break;
                             else {
                                 for (mt5::iterator itr5 = (itr6->second).begin(); itr5 != (itr6->second).end(); itr5++) {
-                                    if (itr5->first > s.t[3]) break;
+                                    if (itr5->first > s.p[3]) break;
                                     else if (find_dominating_state_c_iterations(s, itr5->second)) return true;
                                 }
                             }
@@ -244,16 +244,16 @@ namespace NS_4tasks {
     void remove_dominated_states_p_iterations(const state& s, mt8& visitedStates8) {
         
         for (mt8::reverse_iterator itr8 = visitedStates8.rbegin(); itr8 != visitedStates8.rend();) {
-            if (itr8->first < s.t[0]) break;
+            if (itr8->first < s.p[0]) break;
             else {
                 for (mt7::reverse_iterator itr7 = (itr8->second).rbegin(); itr7 != (itr8->second).rend();) {
-                    if (itr7->first < s.t[1]) break;
+                    if (itr7->first < s.p[1]) break;
                     else {
                         for (mt6::reverse_iterator itr6 = (itr7->second).rbegin(); itr6 != (itr7->second).rend();) {
-                            if (itr6->first < s.t[2]) break;
+                            if (itr6->first < s.p[2]) break;
                             else {
                                 for (mt5::reverse_iterator itr5 = (itr6->second).rbegin(); itr5 != (itr6->second).rend();) {
-                                    if (itr5->first < s.t[3]) break;
+                                    if (itr5->first < s.p[3]) break;
                                     else {
                                         remove_dominated_states_c_iterations(s, (itr5->second));
                                         if ((itr5->second).empty()) (itr6->second).erase(--(itr5.base()));
@@ -345,13 +345,13 @@ namespace NS_4tasks {
         for (int i = 0; i < ts.n; i++) if (s.c[i] > 0) bs_pj.set(i, 1); else bs_pj.set(i, 0);
 
         my_bitset bs_lj;
-        for (int i = 0; i < ts.n; i++) if (s.t[i] > 0) bs_lj.set(i, 1); else bs_lj.set(i, 0);
+        for (int i = 0; i < ts.n; i++) if (s.p[i] > 0) bs_lj.set(i, 1); else bs_lj.set(i, 0);
 
         my_bitset bs_p1;
-        for (int i = 0; i < ts.n; i++) if (s.t[i] > ((float)(ts.T[i]))/2) bs_p1.set(i, 1); else bs_p1.set(i, 0);
+        for (int i = 0; i < ts.n; i++) if (s.p[i] > ((float)(ts.P[i]))/2) bs_p1.set(i, 1); else bs_p1.set(i, 0);
 
         // add state s to map
-        (*visitedStates)[bs_pj][bs_lj][bs_p1][s.sumCs][s.sumSlacks][s.t[0]][s.t[1]][s.t[2]][s.t[3]][s.c[0]][s.c[1]][s.c[2]][s.c[3]] = true;
+        (*visitedStates)[bs_pj][bs_lj][bs_p1][s.sumCs][s.sumSlacks][s.p[0]][s.p[1]][s.p[2]][s.p[3]][s.c[0]][s.c[1]][s.c[2]][s.c[3]] = true;
     }
     
     

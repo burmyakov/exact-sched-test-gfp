@@ -101,10 +101,10 @@ namespace NS_2tasks {
     bool find_dominating_state_p_iterations(const state& s, mt4& visitedStates4) {
         
         for (mt4::iterator itr4 = visitedStates4.begin(); itr4 != visitedStates4.end(); itr4++) {
-            if (itr4->first > s.t[0]) break;
+            if (itr4->first > s.p[0]) break;
             else {
                 for (mt3::iterator itr3 = (itr4->second).begin(); itr3 != (itr4->second).end(); itr3++) {
-                    if (itr3->first > s.t[1]) break;
+                    if (itr3->first > s.p[1]) break;
                     else if (find_dominating_state_c_iterations(s, itr3->second)) return true;
                 }
             }
@@ -205,10 +205,10 @@ namespace NS_2tasks {
     void remove_dominated_states_p_iterations(const state& s, mt4& visitedStates4) {
         
         for (mt4::reverse_iterator itr4 = visitedStates4.rbegin(); itr4 != visitedStates4.rend();) {
-            if (itr4->first < s.t[0]) break;
+            if (itr4->first < s.p[0]) break;
             else {
                 for (mt3::reverse_iterator itr3 = (itr4->second).rbegin(); itr3 != (itr4->second).rend();) {
-                    if (itr3->first < s.t[1]) break;
+                    if (itr3->first < s.p[1]) break;
                     else {
                         remove_dominated_states_c_iterations(s, (itr3->second));
                         if ((itr3->second).empty()) (itr4->second).erase(--(itr3.base()));
@@ -295,13 +295,13 @@ namespace NS_2tasks {
         for (int i = 0; i < ts.n; i++) if (s.c[i] > 0) bs_pj.set(i, 1); else bs_pj.set(i, 0);
         
         my_bitset bs_lj;
-        for (int i = 0; i < ts.n; i++) if (s.t[i] > 0) bs_lj.set(i, 1); else bs_lj.set(i, 0);
+        for (int i = 0; i < ts.n; i++) if (s.p[i] > 0) bs_lj.set(i, 1); else bs_lj.set(i, 0);
         
         my_bitset bs_p1;
-        for (int i = 0; i < ts.n; i++) if (s.t[i] > ((float)(ts.T[i]))/2) bs_p1.set(i, 1); else bs_p1.set(i, 0);
+        for (int i = 0; i < ts.n; i++) if (s.p[i] > ((float)(ts.P[i]))/2) bs_p1.set(i, 1); else bs_p1.set(i, 0);
         
         // add state s to map
-        (*visitedStates)[bs_pj][bs_lj][bs_p1][s.sumCs][s.sumSlacks][s.t[0]][s.t[1]][s.c[0]][s.c[1]] = true;
+        (*visitedStates)[bs_pj][bs_lj][bs_p1][s.sumCs][s.sumSlacks][s.p[0]][s.p[1]][s.c[0]][s.c[1]] = true;
     }
     
     

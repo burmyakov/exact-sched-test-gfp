@@ -129,21 +129,21 @@ namespace NS_5tasks {
 
         for (mt10::iterator itr10 = visitedStates10.begin(); itr10 != visitedStates10.end(); itr10++) {
             
-            if (itr10->first > s.t[0]) break;
+            if (itr10->first > s.p[0]) break;
             else {
                 
                 for (mt9::iterator itr9 = (itr10->second).begin(); itr9 != (itr10->second).end(); itr9++) {
-                    if (itr9->first > s.t[1]) break;
+                    if (itr9->first > s.p[1]) break;
                     else {
                         for (mt8::iterator itr8 = (itr9->second).begin(); itr8 != (itr9->second).end(); itr8++) {
-                            if (itr8->first > s.t[2]) break;
+                            if (itr8->first > s.p[2]) break;
                             else {
                                 
                                 for (mt7::iterator itr7 = (itr8->second).begin(); itr7 != (itr8->second).end(); itr7++) {
-                                    if (itr7->first > s.t[3]) break;
+                                    if (itr7->first > s.p[3]) break;
                                     else {
                                         for (mt6::iterator itr6 = (itr7->second).begin(); itr6 != (itr7->second).end(); itr6++) {
-                                            if (itr6->first > s.t[4]) break;
+                                            if (itr6->first > s.p[4]) break;
                                             else if (find_dominating_state_c_iterations(s, itr6->second)) return true;
                                         }
                                     }
@@ -270,21 +270,21 @@ namespace NS_5tasks {
     void remove_dominated_states_p_iterations(const state& s, mt10& visitedStates10) {
 
         for (mt10::reverse_iterator itr10 = visitedStates10.rbegin(); itr10 != visitedStates10.rend();) {
-            if (itr10->first < s.t[0]) break;
+            if (itr10->first < s.p[0]) break;
             else {
                 
                 for (mt9::reverse_iterator itr9 = (itr10->second).rbegin(); itr9 != (itr10->second).rend();) {
-                    if (itr9->first < s.t[1]) break;
+                    if (itr9->first < s.p[1]) break;
                     else {
                         
                         for (mt8::reverse_iterator itr8 = (itr9->second).rbegin(); itr8 != (itr9->second).rend();) {
-                            if (itr8->first < s.t[2]) break;
+                            if (itr8->first < s.p[2]) break;
                             else {
                                 for (mt7::reverse_iterator itr7 = (itr8->second).rbegin(); itr7 != (itr8->second).rend();) {
-                                    if (itr7->first < s.t[3]) break;
+                                    if (itr7->first < s.p[3]) break;
                                     else {
                                         for (mt6::reverse_iterator itr6 = (itr7->second).rbegin(); itr6 != (itr7->second).rend();) {
-                                            if (itr6->first < s.t[4]) break;
+                                            if (itr6->first < s.p[4]) break;
                                             else {
                                                 remove_dominated_states_c_iterations(s, (itr6->second));
                                                 if ((itr6->second).empty()) (itr7->second).erase(--(itr6.base()));
@@ -380,13 +380,13 @@ namespace NS_5tasks {
         for (int i = 0; i < ts.n; i++) if (s.c[i] > 0) bs_pj.set(i, 1); else bs_pj.set(i, 0);
 
         my_bitset bs_lj;
-        for (int i = 0; i < ts.n; i++) if (s.t[i] > 0) bs_lj.set(i, 1); else bs_lj.set(i, 0);
+        for (int i = 0; i < ts.n; i++) if (s.p[i] > 0) bs_lj.set(i, 1); else bs_lj.set(i, 0);
 
         my_bitset bs_p1;
-        for (int i = 0; i < ts.n; i++) if (s.t[i] > ((float)(ts.T[i]))/2) bs_p1.set(i, 1); else bs_p1.set(i, 0);
+        for (int i = 0; i < ts.n; i++) if (s.p[i] > ((float)(ts.P[i]))/2) bs_p1.set(i, 1); else bs_p1.set(i, 0);
 
         // add state s to map
-        (*visitedStates)[bs_pj][bs_lj][bs_p1][s.sumCs][s.sumSlacks][s.t[0]][s.t[1]][s.t[2]][s.t[3]][s.t[4]][s.c[0]][s.c[1]][s.c[2]][s.c[3]][s.c[4]] = true;
+        (*visitedStates)[bs_pj][bs_lj][bs_p1][s.sumCs][s.sumSlacks][s.p[0]][s.p[1]][s.p[2]][s.p[3]][s.p[4]][s.c[0]][s.c[1]][s.c[2]][s.c[3]][s.c[4]] = true;
     }
     
     
