@@ -5,12 +5,13 @@
 #include "get_delta_t.h"
 #include "scheduler.h"
 #include "pruning_constraints.h"
+#include <cinttypes>
 
 
 
 
 // check which jobs interfere lower priority jobs
-void update_interferance_flags(state& s, const unsigned short int m, const unsigned short* perm) {
+void update_interferance_flags(state& s, const uint8_t m, const uint8_t* perm) {
     if (s.pendJobsNum > m)
         for (int i = 0; i < m; i++)
             s.interferred[perm[i]] = true;
@@ -23,7 +24,7 @@ void update_interferance_flags(state& s, const unsigned short int m, const unsig
 // Deadline check
 bool deadline_miss(const state& s, const bool verbose) {
     
-    const unsigned short N = s.tsLocal.n;
+    const uint8_t N = s.tsLocal.n;
     
     if (s.d(N-1) < s.c[N-1]) {
         if (verbose) {
@@ -49,35 +50,37 @@ bool deadline_miss(const state& s, const bool verbose) {
 // -1 - deadline miss
 // 0 - continue traversal of successors
 // 1 - schedule can be discarded
-short int algorithm_move(state& s, const unsigned short int N, const unsigned short int m, bool verbose) {
+int8_t algorithm_move(state& s, const uint8_t N, const uint8_t m, bool verbose) {
 
     if (!conditionA_cri_tau_i(s, m)) return 1;
     if (!conditionB_cri_tau_i(s, m)) return 1;
 
-    unsigned short* perm = new unsigned short [N];
+    uint8_t* perm = new uint8_t [N];
+    //unsigned short* perm = new unsigned short [N];
     sortTasksByPriorities(s, N, perm);
     update_interferance_flags(s, m, perm);
 
+    //uint8_t dt = deltaT(s, N, m, perm);
     int dt = deltaT(s, N, m, perm);
     
     if (!condition_job_interference(s, m, dt, perm)) {
         // interf. cond. violated
-        for (int i = 0; i < m; i++) s.c[perm[i]] = max(s.c[perm[i]] - dt, 0);
-        for (int i = 0; i < N; i++) s.p[i] = max(s.p[i] - dt, 0); // ????????? to recheck
+        for (uint8_t i = 0; i < m; i++) s.c[perm[i]] = max(s.c[perm[i]] - dt, 0);
+        for (uint8_t i = 0; i < N; i++) s.p[i] = max(s.p[i] - dt, 0); // ????????? to recheck
         if (deadline_miss(s, verbose)) return -1;
         else return 1; // no deadline miss, but interference cond. violated
     } else {
         // interf. cond. holds
-        const unsigned short previousCk = s.c[N-1];
-        for (unsigned short i = 0; i < N; i++) s.jobCanBeReleasedBefore[i] = ((s.p[i] == 0)?true:false);
+        const uint8_t previousCk = s.c[N-1];
+        for (uint8_t i = 0; i < N; i++) s.jobCanBeReleasedBefore[i] = ((s.p[i] == 0)?true:false);
         
         conditionC_cri_tau_i(s, m, perm); // set .releaseAtEarliest flags
         
-        for (int i = 0; i < m; i++) s.c[perm[i]] = max(s.c[perm[i]] - dt, 0);
-        for (int i = 0; i < N; i++) s.p[i] = max(s.p[i] - dt, 0);
+        for (uint8_t i = 0; i < m; i++) s.c[perm[i]] = max(s.c[perm[i]] - dt, 0);
+        for (uint8_t i = 0; i < N; i++) s.p[i] = max(s.p[i] - dt, 0);
         if (deadline_miss(s, verbose)) return -1;
         
-        for (unsigned short i = 0; i < N; i++) s.prevState_processorAvailableForTau_i[i] = s.processorAvailableForTau_i[i];
+        for (uint8_t i = 0; i < N; i++) s.prevState_processorAvailableForTau_i[i] = s.processorAvailableForTau_i[i];
         
         if ((previousCk > 0) && (s.c[N-1] == 0)) return 1; // state is discarded, as analyzed job completes execution
     }

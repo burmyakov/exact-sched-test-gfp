@@ -1,1 +1,1 @@
-void generate_successors(const TS&, state&, const unsigned short, vector<state>*, unsigned short&);
+void generate_successors(const TS&, state&, const uint8_t, vector<state>*, unsigned short&);

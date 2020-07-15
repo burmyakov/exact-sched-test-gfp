@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <cinttypes>
 //#include "ts.h"
 
 using namespace std;
@@ -8,23 +9,21 @@ using namespace std;
 
 struct state {
     TS& tsLocal;
-    unsigned short int* c; // remaining execution time
-    //unsigned short int* d; // remaining time until deadline
-    unsigned short int* p; // time to next period
+    uint8_t* c; // remaining execution time
+    uint8_t* p; // time to next period
     bool* interferred; // interference flags
     bool* jobCanBeReleasedBefore;
     bool* processorAvailableForTau_i;
     bool* prevState_processorAvailableForTau_i;
-    unsigned short int pendJobsNum;
-    unsigned short int lockedJobsNum;
+    uint8_t pendJobsNum;
+    uint8_t lockedJobsNum;
     unsigned short int sumCs;
     unsigned short int sumSlacks;
     
     // constructor 1
     state(TS& _ts): tsLocal(_ts) {
-        c = new unsigned short int[tsLocal.n];
-        //d = new unsigned short int[tsLocal.n];
-        p = new unsigned short int[tsLocal.n];
+        c = new uint8_t[tsLocal.n];
+        p = new uint8_t[tsLocal.n];
         for (int i = 0; i < tsLocal.n; i++) c[i] = p[i] = 0;
 
         jobCanBeReleasedBefore = new bool[tsLocal.n];
@@ -47,13 +46,11 @@ struct state {
     
     // copy constructor
     state(const state& s) : tsLocal(s.tsLocal) {
-        c = new unsigned short int[tsLocal.n];
-        //d = new unsigned short int[tsLocal.n];
-        p = new unsigned short int[tsLocal.n];
+        c = new uint8_t[tsLocal.n];
+        p = new uint8_t[tsLocal.n];
         
         for (int i = 0; i < tsLocal.n; i++) {
             c[i] = s.c[i];
-            //d[i] = s.d[i];
             p[i] = s.p[i];
         }
 
@@ -80,7 +77,6 @@ struct state {
         if(this != &s) {
             for(unsigned short i=0; i<tsLocal.n; i++) {
                 c[i] = s.c[i];
-                //d[i] = s.d[i];
                 p[i] = s.p[i];
                 jobCanBeReleasedBefore[i] = s.jobCanBeReleasedBefore[i];
             }

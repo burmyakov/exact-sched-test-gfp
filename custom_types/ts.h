@@ -1,20 +1,21 @@
 #include <algorithm>
 #include <cassert>
+#include <cinttypes>
 
 struct TS {
 	// Task system
-	int n; // n. of tasks -- must be less than MAXN
+	uint8_t n; // n. of tasks -- must be less than MAXN
 	static const int MAXN = 16; 
-	int C[MAXN]; // WCETs
-	int D[MAXN]; // deadlines
-	int P[MAXN]; // minimum interarrival times
+	uint8_t C[MAXN]; // WCETs
+	uint8_t D[MAXN]; // deadlines
+	uint8_t P[MAXN]; // minimum interarrival times
 	
-	int pmax; // max(P_i) (buffered value)
+	uint8_t pmax; // max(P_i) (buffered value)
 	TS() { }
     
-	TS(int n_) : n(n_), pmax(0) { assert(n <= MAXN); }
+	TS(uint8_t n_) : n(n_), pmax(0) { assert(n <= MAXN); }
     
-	void setTask(int i, int Ci, int Di, int Pi) {
+	void setTask(uint8_t i, uint8_t Ci, uint8_t Di, uint8_t Pi) {
 		C[i] = Ci;
 		D[i] = Di;
 		P[i] = Pi;

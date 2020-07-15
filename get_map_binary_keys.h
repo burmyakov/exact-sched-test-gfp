@@ -1,11 +1,11 @@
-void get_keys_pj(const state&, const unsigned short, unsigned int&, vector<my_bitset>*);
+void get_keys_pj(const state&, const uint8_t, unsigned int&, vector<my_bitset>*);
 void get_keys_p1(const state&, const TS&, const my_bitset, unsigned int&, vector<my_bitset>*);
 void get_keys_p2(const state&, const TS&, const my_bitset, const my_bitset, unsigned int&, vector<my_bitset>*);
 void get_keys_p2_2(const state&, const TS&, const my_bitset, const my_bitset, unsigned int&, vector<my_bitset>*);
-void get_keys_pj2(const state&, const unsigned short, unsigned int&, vector<my_bitset>*);
+void get_keys_pj2(const state&, const uint8_t, unsigned int&, vector<my_bitset>*);
 void get_keys_p1_2(const state&, const TS&, const my_bitset, unsigned int&, vector<my_bitset>*);
-void get_keys_lj(const state&, const unsigned short, const my_bitset, unsigned int&, vector<my_bitset>*);
-void get_keys_lj2(const state&, const unsigned short, const my_bitset, unsigned int&, vector<my_bitset>*);
+void get_keys_lj(const state&, const uint8_t, const my_bitset, unsigned int&, vector<my_bitset>*);
+void get_keys_lj2(const state&, const uint8_t, const my_bitset, unsigned int&, vector<my_bitset>*);
 void get_keys_p3(const state&, const TS&, const my_bitset, const my_bitset, const my_bitset, unsigned int&, vector<my_bitset>*);
 void get_keys_p3_2(const state&, const TS&, const my_bitset, const my_bitset, const my_bitset, unsigned int&, vector<my_bitset>*);
 //void get_keys_p4(const state&, const TS&, const my_bitset, const my_bitset, const my_bitset, const my_bitset, unsigned int&, vector<my_bitset>*);

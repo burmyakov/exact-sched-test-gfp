@@ -6,6 +6,7 @@
 #include <bitset>
 #include <cmath>
 #include <climits>
+#include <cinttypes>
 #include "../custom_types/ts.h"
 #include "../custom_types/state.h"
 #include "../custom_types/map_7_tasks.h"
@@ -23,7 +24,7 @@ namespace NS_7tasks {
     
     // Main data structures
     TS ts; // the task system being analyzed
-    int m;
+    uint8_t m;
     unsigned long int visitedStatesNum = 0;
     unsigned long int visitedStatesNum_withTauKpending = 0;
     unsigned long int savedStatesNum = 0;
@@ -194,16 +195,16 @@ namespace NS_7tasks {
         
         get_keys_pj(s, ts.n, keysNum_pj, bKeys_pj);
         
-        for (int i19 = 0; i19 < keysNum_pj; i19++) { // pending jobs binary key
+        for (unsigned int i19 = 0; i19 < keysNum_pj; i19++) { // pending jobs binary key
             if ((*visitedStates).find((*bKeys_pj)[i19]) != (*visitedStates).end()) {
                 
                 get_keys_lj(s, ts.n, (*bKeys_pj)[i19], keysNum_lj, bKeys_lj);
-                for (int i18 = 0; i18 < keysNum_lj; i18++) { // locked jobs binary key
+                for (unsigned int i18 = 0; i18 < keysNum_lj; i18++) { // locked jobs binary key
                     
                     if (((*visitedStates)[(*bKeys_pj)[i19]]).find((*bKeys_lj)[i18]) != ((*visitedStates)[(*bKeys_pj)[i19]]).end()) {
                         
                         get_keys_p1(s, ts, (*bKeys_lj)[i18], keysNum_p1, bKeys_p1);
-                        for (int i17 = 0; i17 < keysNum_p1; i17++) { // p1 keys
+                        for (unsigned int i17 = 0; i17 < keysNum_p1; i17++) { // p1 keys
                             
                             if ((((*visitedStates)[(*bKeys_pj)[i19]])[(*bKeys_lj)[i18]]).find((*bKeys_p1)[i17]) != (((*visitedStates)[(*bKeys_pj)[i19]])[(*bKeys_lj)[i18]]).end()) {
                                 
@@ -372,17 +373,17 @@ namespace NS_7tasks {
         
         get_keys_pj2(s, ts.n, keysNum_pj2, bKeys_pj2);
         
-        for (int i19 = 0; i19 < keysNum_pj2; i19++) { // pending jobs binary key
+        for (unsigned int i19 = 0; i19 < keysNum_pj2; i19++) { // pending jobs binary key
             if ((*visitedStates).find((*bKeys_pj2)[i19]) != (*visitedStates).end()) {
                 
                 get_keys_lj2(s, ts.n, (*bKeys_pj2)[i19], keysNum_lj2, bKeys_lj2);
                 
-                for (int i18 = 0; i18 < keysNum_lj2; i18++) { // locked jobs binary key
+                for (unsigned int i18 = 0; i18 < keysNum_lj2; i18++) { // locked jobs binary key
                     
                     if (((*visitedStates)[(*bKeys_pj2)[i19]]).find((*bKeys_lj2)[i18]) != ((*visitedStates)[(*bKeys_pj2)[i19]]).end()) {
                         
                         get_keys_p1_2(s, ts, (*bKeys_lj2)[i18], keysNum_p1_2, bKeys_p1_2);
-                        for (int i17 = 0; i17 < keysNum_p1_2; i17++) { // p1 key
+                        for (unsigned int i17 = 0; i17 < keysNum_p1_2; i17++) { // p1 key
                             
                             if (((*visitedStates)[(*bKeys_pj2)[i19]][(*bKeys_lj2)[i18]]).find((*bKeys_p1_2)[i17]) != ((*visitedStates)[(*bKeys_pj2)[i19]][(*bKeys_lj2)[i18]]).end()) {
                                 
@@ -429,13 +430,13 @@ namespace NS_7tasks {
         
         // Get bitset keys of state s
         my_bitset bs_pj;
-        for (unsigned short i = 0; i < ts.n; i++) if (s.c[i] > 0) bs_pj.set(i, 1); else bs_pj.set(i, 0);
+        for (uint8_t i = 0; i < ts.n; i++) if (s.c[i] > 0) bs_pj.set(i, 1); else bs_pj.set(i, 0);
 
         my_bitset bs_p1;
-        for (unsigned short i = 0; i < ts.n; i++) if (s.p[i] > ((float)(ts.P[i]))/2) bs_p1.set(i, 1); else bs_p1.set(i, 0);
+        for (uint8_t i = 0; i < ts.n; i++) if (s.p[i] > ((float)(ts.P[i]))/2) bs_p1.set(i, 1); else bs_p1.set(i, 0);
         
         my_bitset bs_lj;
-        for (unsigned short i = 0; i < ts.n; i++) if (s.p[i] > 0) bs_lj.set(i, 1); else bs_lj.set(i, 0);
+        for (uint8_t i = 0; i < ts.n; i++) if (s.p[i] > 0) bs_lj.set(i, 1); else bs_lj.set(i, 0);
 
         // add state s to map
         (*visitedStates)[bs_pj][bs_lj][bs_p1][s.sumCs][s.sumSlacks][s.p[0]][s.p[1]][s.p[2]][s.p[3]][s.p[4]][s.p[5]][s.p[6]][s.c[0]][s.c[1]][s.c[2]][s.c[3]][s.c[4]][s.c[5]][s.c[6]] = true;
@@ -517,7 +518,7 @@ namespace NS_7tasks {
             
             // Analyse generated successors;
             // discard those successors which have been visited at previous iterations
-            for (int successorItr = 0; successorItr < successorsNum; successorItr++) {
+            for (unsigned int successorItr = 0; successorItr < successorsNum; successorItr++) {
                 s = (*successors)[successorItr];
                 
                 visitedStatesNum++;
@@ -526,7 +527,7 @@ namespace NS_7tasks {
                 if (!condition_for_releases_of_hp_jobs(s)) continue;
                 if (!condition_necessary_unsched(s, m)) continue;
                 
-                short int algMove_ExitCode = algorithm_move(s, ts.n, m, verbose);
+                int8_t algMove_ExitCode = algorithm_move(s, ts.n, m, verbose);
                 
                 if (algMove_ExitCode == -1) {
                     // deadline miss
@@ -584,7 +585,7 @@ namespace NS_7tasks {
 
 
 
-bool test_7th_task(const bool verbose_, const unsigned short m_, const TS& ts_, const bool removeStates_, unsigned long int& savedStatesNum_, unsigned long int& visitedStatesNum_) {
+bool test_7th_task(const bool verbose_, const uint8_t m_, const TS& ts_, const bool removeStates_, unsigned long int& savedStatesNum_, unsigned long int& visitedStatesNum_) {
     
     NS_7tasks::verbose = verbose_;
     

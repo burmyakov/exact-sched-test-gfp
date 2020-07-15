@@ -15,6 +15,7 @@
 #include "p1_key/test_12th_task.h"
 #include "p1_key/test_13th_task.h"
 #include "p1_key/test_14th_task.h"*/
+#include <cinttypes>
 
 
 using namespace std;
@@ -40,8 +41,8 @@ int main(int argc, char* argv[]) {
     cin >> implicitDeadlines;
     
     tsOriginal.n = n;
-    int C, D, P;
-    for (int i = 0; i < n; i++) {
+    unsigned short C, D, P;
+    for (unsigned short i = 0; i < n; i++) {
         cerr << "C[" << i << "]?" << endl;
         cin >> C;
         
@@ -81,13 +82,13 @@ int main(int argc, char* argv[]) {
     unsigned long int tExecutionTotal_p1 = 0;
     
     
-    for (int N = m + 1; N <= tsOriginal.n; N++) {
+    for (uint8_t N = m + 1; N <= tsOriginal.n; N++) {
         ts.n = N;
         ts.setTask(N-1, tsOriginal.C[N-1], tsOriginal.D[N-1], tsOriginal.P[N-1]);
 
         if (verbose) {
             cout << endl << "===================" << endl;
-            cout << "Checking task " << ts.n << endl;
+            cout << "Checking task " << (int)ts.n << endl;
         }
 
         switch (N) {
@@ -203,11 +204,11 @@ int main(int argc, char* argv[]) {
     }
 
 
-    /*const char* fileName = (argv[6+3*(tsOriginal.n)]);
+    const char* fileName = (argv[2*(tsOriginal.n)+5]);
 
     fileResults.open(fileName, ios::app);
     fileResults << "\t" << sched << "\t" << tExecutionTotal_p1 << "\t" << savedStatesNum;
-    fileResults.close();*/
+    fileResults.close();
     
     if (!removeDominatedStatesFromMap) cout << "Sporadic burm2018 p1 (no r.):\t" << (float)(tExecutionTotal_p1*100/CLOCKS_PER_SEC)/100 << " sec,  \t / " << savedStatesNum << " saved states" << "  \t / " << visitedStatesNum << " visited states";
     else cout << "Sporadic burm2018 p1:\t\t" << (float)(tExecutionTotal_p1*100/CLOCKS_PER_SEC)/100 << " sec,  \t / " << savedStatesNum << " saved states" << "  \t / " << visitedStatesNum << " visited states";

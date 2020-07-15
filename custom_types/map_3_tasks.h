@@ -1,17 +1,18 @@
 #include <map>
 #include "my_types.h"
+#include <cinttypes>
 
 using namespace std;
 
 
-typedef map<unsigned short, bool> mt1;
-typedef map<unsigned short, mt1> mt2;
-typedef map<unsigned short, mt2> mt3;
-typedef map<unsigned short, mt3> mt4;
-typedef map<unsigned short, mt4> mt5;
-typedef map<unsigned short, mt5> mt6;
-typedef map<unsigned short, mt6> mt7;
-typedef map<unsigned short, mt7> mt8;
+typedef map<uint8_t, bool> mt1;
+typedef map<uint8_t, mt1> mt2;
+typedef map<uint8_t, mt2> mt3;
+typedef map<uint8_t, mt3> mt4;
+typedef map<uint8_t, mt4> mt5;
+typedef map<uint8_t, mt5> mt6;
+typedef map<uint8_t, mt6> mt7;
+typedef map<uint8_t, mt7> mt8;
 typedef map<my_bitset, mt8, cmpOfBitsets> mt9;
 typedef map<my_bitset, mt9, cmpOfBitsets> mt10;
 typedef map<my_bitset, mt10, cmpOfBitsets> mt11;
