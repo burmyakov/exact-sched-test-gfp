@@ -174,7 +174,7 @@ bool find_dominating_state(const state& s, const unsigned short m, const TS& ts,
     unsigned int keysNum_pj = 0;
     get_keys_pj(s, m, keysNum_pj, bKeys_pj);
     
-    for (int i23 = 0; i23 < keysNum_pj; i23++) {
+    for (unsigned int i23 = 0; i23 < keysNum_pj; i23++) {
         if ((*visitedStates).find((*bKeys_pj)[i23]) != (*visitedStates).end()) {
             if (find_dominating_state_hpt1(s, ts, (*visitedStates)[(*bKeys_pj)[i23]])) return true;
         }
