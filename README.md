@@ -1,4 +1,4 @@
-# exact-sched-test-gfp
+# Exact schedulability test for Global Fixed Priorities on multicore
 
 An exact schedulability test for global fixed-priority (GFP) multiprocessor scheduling. Applies to real-time sporadic tasks with constrained deadlines. Implemented in C++. 
 
