@@ -491,7 +491,7 @@ namespace NS_9tasks {
         for (uint8_t i = 0; i < ts.n; i++) if (s.p[i] > 0) bs_lj.set(i, 1); else bs_lj.set(i, 0);
 
         my_bitset bs_p1;
-        for (uint8_t i = 0; i < ts.n; i++) if (s.p[i] > ((float)(s.P[i]))/2) bs_p1.set(i, 1); else bs_p1.set(i, 0);
+        for (uint8_t i = 0; i < ts.n; i++) if (s.p[i] > ((float)(ts.P[i]))/2) bs_p1.set(i, 1); else bs_p1.set(i, 0);
 
         // add state s to map
         (*visitedStates)[bs_pj][bs_lj][bs_p1][s.sumCs][s.sumSlacks][s.p[0]][s.p[1]][s.p[2]][s.p[3]][s.p[4]][s.p[5]][s.p[6]][s.p[7]][s.p[8]][s.c[0]][s.c[1]][s.c[2]][s.c[3]][s.c[4]][s.c[5]][s.c[6]][s.c[7]][s.c[8]] = true;
