@@ -1,3 +1,6 @@
+#pragma once
+#include "custom_types/state.h"
+
 bool condition_cri_2(const state& s, const uint_fast8_t m, const uint_fast8_t i, const bool processorAvailableToTauI);
 bool condition_necessary_unsched(const state& s, const TS& ts, const uint_fast8_t m);
 bool condition_for_releases_of_hp_jobs(const state& s);

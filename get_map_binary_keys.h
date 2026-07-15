@@ -1,3 +1,8 @@
+#pragma once
+#include "custom_types/my_types.h"
+#include "custom_types/state.h"
+#include "custom_types/ts.h"
+
 void get_keys_pj(const state&, const uint8_t, unsigned int&, vector<my_bitset>*);
 void get_keys_p1(const state&, const TS&, const my_bitset, unsigned int&, vector<my_bitset>*);
 void get_keys_p2(const state&, const TS&, const my_bitset, const my_bitset, unsigned int&, vector<my_bitset>*);
