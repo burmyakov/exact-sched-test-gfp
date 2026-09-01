@@ -1,7 +1,8 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <algorithm>
-//#include "ts.h"
+#include "ts.h"
 
 using namespace std;
 
@@ -27,7 +28,7 @@ struct state {
     uint_fast8_t sumCs;
     bool* tauI_jobJustCompleted;
     int_fast8_t* tauI_releaseNextJobBefore;
-    
+
     // constructor 1
     //state(TS& _ts): tsLocal(_ts) {
     state(const uint_fast8_t _n): n(_n) {
@@ -49,20 +50,20 @@ struct state {
             processorAvailableForTau_i[i] = true;
             prevState_processorAvailableForTau_i[i] = true; // check this assumption !!!
         }
-        
+
         interferred = new bool[n-1];
         for (int i = 0; i < n - 1; i++) interferred[i] = 0;
-        
+
         pendJobsNum = 0;
         lockedJobsNum = 0;
         sumCs = 0;
-        
+
         tauI_jobJustCompleted = new bool[n];
         for (int i = 0; i < n; i++) tauI_jobJustCompleted[i] = false;
         tauI_releaseNextJobBefore = new int_fast8_t[n];
         for (int i = 0; i < n; i++) tauI_releaseNextJobBefore[i] = -1;
     }
-    
+
     // copy constructor
     state(const state& s) : n(s.n) {
         c = new uint_fast8_t[n];
@@ -71,7 +72,7 @@ struct state {
         wrts = new uint_fast8_t[n];
         firstJobReleased = new bool[n];
         //releaseAtEarliest = new bool[n];
-        
+
         for (int i = 0; i < n; i++) {
             c[i] = s.c[i];
             p[i] = s.p[i];
@@ -89,20 +90,20 @@ struct state {
             processorAvailableForTau_i[i] = s.processorAvailableForTau_i[i];
             prevState_processorAvailableForTau_i[i] = s.prevState_processorAvailableForTau_i[i];
         }
-        
+
         interferred = new bool[n - 1];
         for (int i = 0; i < n-1; i++) interferred[i] = s.interferred[i];
 
         pendJobsNum = s.pendJobsNum;
         lockedJobsNum = s.lockedJobsNum;
         sumCs = s.sumCs;
-        
+
         tauI_jobJustCompleted = new bool[n];
         for (int i = 0; i < n; i++) tauI_jobJustCompleted[i] = s.tauI_jobJustCompleted[i];
         tauI_releaseNextJobBefore = new int_fast8_t[n];
         for (int i = 0; i < n; i++) tauI_releaseNextJobBefore[i] = s.tauI_releaseNextJobBefore[i];
     }
-    
+
     state& operator=(const state& s) {
         if(this != &s) {
             for(uint_fast8_t i = 0; i < n; i++) {
@@ -114,7 +115,7 @@ struct state {
                 //releaseAtEarliest[i] = s.releaseAtEarliest[i];
                 jobCanBeReleasedBefore[i] = s.jobCanBeReleasedBefore[i];
             }
-            
+
             for (uint_fast8_t i = 0; i < n; i++) {
                 processorAvailableForTau_i[i] = s.processorAvailableForTau_i[i];
                 prevState_processorAvailableForTau_i[i] = s.prevState_processorAvailableForTau_i[i];
@@ -131,51 +132,51 @@ struct state {
         }
         return *this;
     }
-    
+
     void updatePendJobsNum() {
         pendJobsNum = 0;
         for (int i = 0; i < n; i++) if (c[i] > 0) pendJobsNum++;
         return;
     }
-    
+
     void updateLockedJobsNum() {
         lockedJobsNum = 0;
         for (int i = 0; i < n; i++) if (p[i] > 0) lockedJobsNum++;
         return;
     }
-    
+
     void updateSumCs() {
         sumCs = 0;
         for (int i = 0; i < n; i++) sumCs += c[i];
         return;
     }
-    
+
     void updateCounters() {
-        
+
         pendJobsNum = 0;
         lockedJobsNum = 0;
         sumCs = 0;
-        
+
         for (uint_fast8_t i = 0; i < n; ++i) {
             if (p[i] > 0) {
                 lockedJobsNum++;
-                
+
                 if (c[i] > 0) {
                     pendJobsNum++;
                     sumCs += c[i];
                 }
             }
         }
-        
+
         return;
     }
 
-    
-    
-    
-    
+
+
+
+
     bool operator<(const state& s) const {
-        
+
         for (int i = n-1; i >= 0; i--) {
             if ((c[i] > 0) && (s.c[i] > 0)) {
             //if ((p[i] > 0) && (s.p[i] > 0)) {
@@ -188,39 +189,39 @@ struct state {
                 }
             }
         }
-        
+
         if (lockedJobsNum < s.lockedJobsNum) return true;
         if (lockedJobsNum > s.lockedJobsNum) return false;
         if (pendJobsNum < s.pendJobsNum) return true;
         if (pendJobsNum > s.pendJobsNum) return false;
-        
-        
+
+
         /*for (int i = 0; i < PROC_NUM; i++) {
             if(c[i] > s.c[i]) return true;
             if(c[i] < s.c[i]) return false;
             if(p[i] < s.p[i]) return true; // false
             if(p[i] > s.p[i]) return false; // true
         }*/
-        
+
         for (int i = n-1; i >= 0; i--) {
             if(c[i] > s.c[i]) return true;
             if(c[i] < s.c[i]) return false;
             if(p[i] < s.p[i]) return true; // false
             if(p[i] > s.p[i]) return false; // true
         }
-        
+
         return false;
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     // Time to next deadline of a task
     inline int d(const uint_fast8_t i, const uint_fast8_t Pi, const uint_fast8_t Di) const {
         return max(p[i] - (Pi - Di), 0);
     }
-    
+
     // Printing functions
     void printCmpct(const TS& ts) const {
         cout << "{";
@@ -230,7 +231,7 @@ struct state {
         cout << "}";
         cout << endl;
     }
-    
+
     void print(const TS& ts) const {
         cout << "==============" << endl;
         cout << "{";
@@ -250,7 +251,7 @@ struct state {
         cout << endl;
         cout << "=============" << endl << endl;
     }
-    
+
     void print_until_tau_i(int indx, const TS& ts) const {
         cout << "==============" << endl;
         cout << "{";
@@ -270,7 +271,7 @@ struct state {
         cout << endl;
         cout << "=============" << endl << endl;
     }
-    
+
     // destructor
     ~state() {
         delete [] c;

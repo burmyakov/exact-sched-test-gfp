@@ -2,3 +2,5 @@ DESKTOP_SESSION*
 SHLVL*
 LOGNAME*
 gfp_test_p1
+**/obj/**
+libgfp.a
