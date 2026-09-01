@@ -3,16 +3,7 @@
 #include <sstream>
 #include <fstream>
 #include "custom_types/ts.h"
-#include "tasks/test_5th_task.h"
-#include "tasks/test_6th_task.h"
-#include "tasks/test_7th_task.h"
-#include "tasks/test_8th_task.h"
-#include "tasks/test_9th_task.h"
-#include "tasks/test_10th_task.h"
-#include "tasks/test_11th_task.h"
-/*#include "tasks/test_12th_task.h"
-#include "tasks/test_13th_task.h"
-#include "tasks/test_14th_task.h"*/
+#include "tasks/test_tasks.h"
 
 
 using namespace std;
@@ -27,7 +18,7 @@ string int_to_string(int i) {
     string s;
     ss << i;
     s = ss.str();
-    
+
     return s;
 }
 
@@ -35,19 +26,19 @@ string int_to_string(int i) {
 
 
 int main(int argc, char* argv[]) {
-    
+
     TS tsOriginal;
-    
+
     const unsigned short m = 4;
     int n;
     //bool removeDominatedStatesFromMap = false;
     bool verbose;
-    
+
     cout << "The case of 4 processors" << endl;
     cout << "n?" << endl;
     cin >> n;
     tsOriginal.n = n;
-    
+
     int Ci, Di, Pi;
     for (int i = 0; i < n; i++) {
         cout << "C[" << i << "]?" << endl;
@@ -58,17 +49,17 @@ int main(int argc, char* argv[]) {
         cin >> Pi;
         tsOriginal.setTask(i, Ci, Di, Pi);
     }
-    
+
     cout << "verbose?" << endl;
     cin >> verbose;
-    
-    
-    
+
+
+
     bool dcmpoSchedule = false;
     cout << "schedule according to DCMPO priority ordering?:" << endl;
     cin >> dcmpoSchedule;
-    
-    
+
+
     // Sort tasks according to D-CMPO order
     if (dcmpoSchedule) {
         for (unsigned short i = 0; i < tsOriginal.n; i++) {
@@ -80,13 +71,13 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
-        
+
         cout << endl << "Scheduling tasks according to DCMPO priority ordering:" << endl;
         for (int i = 0; i < tsOriginal.n; i++) {
             cout << "tau_" << i << ":\t" << (int)tsOriginal.C[i] << ", " << (int)tsOriginal.D[i] << ", " << (int)tsOriginal.P[i] << endl;
         }
     }
-    
+
     cout << "Checking necessary schedulability condition: synchronous periodic releases" << endl;
     string inputs = int_to_string(m) + " " + int_to_string(n);
     for (int i = 0; i < n; i++) inputs += " " + int_to_string(tsOriginal.C[i]) + " " + int_to_string(tsOriginal.D[i]) + " " + int_to_string(tsOriginal.P[i]);
@@ -100,22 +91,22 @@ int main(int argc, char* argv[]) {
     }
     cout << "Necessary sched. cond. holds" << endl;
 
-    
+
     bool sched = true;
-    
+
     unsigned long int savedStatesNum = 0;
     unsigned long int visitedStatesNum = 0;
     unsigned long int savedStatesNumIncr = 0;
     unsigned long int visitedStatesNumIncr = 0;
-    
+
     unsigned long int t0;
     unsigned long int tExecution_p1;
     unsigned long int tExecutionTotal_p1 = 0;
-    
-    
+
+
     TS ts;
     for (uint_fast8_t i = 0; i < m; i++) ts.setTask(i, tsOriginal.C[i], tsOriginal.D[i], tsOriginal.P[i]);
-    
+
     for (uint_fast8_t N = m + 1; N <= tsOriginal.n; N++) {
         ts.n = N;
         ts.setTask(N-1, tsOriginal.C[N-1], tsOriginal.D[N-1], tsOriginal.P[N-1]);
@@ -133,7 +124,7 @@ int main(int argc, char* argv[]) {
 
                 savedStatesNum += savedStatesNumIncr; visitedStatesNum += visitedStatesNumIncr;
                 break;
-                
+
             case 6:
                 t0 = clock();
                 sched = test_6th_task(verbose, m, ts, savedStatesNumIncr, visitedStatesNumIncr);
@@ -206,13 +197,13 @@ int main(int argc, char* argv[]) {
                 savedStatesNum += savedStatesNumIncr; visitedStatesNum += visitedStatesNumIncr;
                 break;*/
 
-                
+
             default: cout << "No function defined to test " << (int)N << " tasks!" << endl;
         }
 
         if (!sched) break;
     }
-    
+
     cout << "Sporadic burm2018 (no r.):\t" << (float)(tExecutionTotal_p1*100/CLOCKS_PER_SEC)/100 << " sec,  \t / " << savedStatesNum << " saved states" << "  \t / " << visitedStatesNum << " visited states";
     if (sched) cout << "  \t / SCHED" << endl;
     else cout << "  \t / UNSCHED" << endl;

@@ -1,3 +1,4 @@
+#pragma once
 #include <map>
 #include "my_types.h"
 #include <cinttypes>

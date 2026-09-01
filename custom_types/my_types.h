@@ -1,3 +1,6 @@
+#pragma once
+#include <bitset>
+
 using namespace std;
 
 typedef bitset<20> my_bitset;
